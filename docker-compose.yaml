@@ -1,0 +1,27 @@
+services:
+  synapse:
+    image: matrixdotorg/synapse:latest
+    restart: unless-stopped
+    environment:
+      - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
+    volumes:
+      - ./synapse:/data
+    networks:
+      custom_network:
+        ipv4_address: 10.10.10.2
+
+  element:
+    image: vectorim/element-web:latest
+    restart: unless-stopped
+    volumes:
+      - ./element-config.json:/app/config.json
+    networks:
+      custom_network:
+        ipv4_address: 10.10.10.3
+
+networks:
+  custom_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: "10.10.10.0/24"
